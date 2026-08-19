@@ -30,7 +30,7 @@ export function OpenView({
 }) {
   const t = useExtracted();
   usePageTitle(
-    t("Free Online Office Editor — Word, Excel, PowerPoint | ZIZIYI"),
+    t("Free Online Office Editor — Word, Excel, PowerPoint | Rakko Office"),
   );
   const [recentFiles, setRecentFiles] = useState<RecentFileRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);

@@ -1,6 +1,7 @@
 import React from "react";
 import { promises as fs } from "fs";
 import path from "path";
+import { SITE_URL } from "@/lib/site";
 
 interface OgImageProps {
   title?: string;
@@ -38,6 +39,8 @@ export const OgImage = async ({
   const logoBase64 = await getLogoDataUri();
   const line1 = title || "Open & Edit Office Documents";
   const line2 = subtitle || "No upload · No server · Fully private";
+  // OG 图片里只展示域名部分（去掉协议前缀），实际域名由 SITE_URL 环境变量决定。
+  const displayUrl = SITE_URL.replace(/^https?:\/\//, "");
 
   return (
     <div
@@ -90,14 +93,14 @@ export const OgImage = async ({
                 background: `linear-gradient(135deg, ${ORANGE} 0%, #FF8C40 100%)`,
               }}
             >
-              <span tw="text-white text-3xl font-black">Z</span>
+              <span tw="text-white text-3xl font-black">R</span>
             </div>
           )}
           <span
             tw="ml-4 text-3xl font-bold text-white"
             style={{ letterSpacing: "-0.02em" }}
           >
-            ZIZIYI Office
+            Rakko Office
           </span>
         </div>
 
@@ -135,7 +138,7 @@ export const OgImage = async ({
         {/* Bottom: url */}
         <div tw="flex">
           <span tw="text-xl" style={{ color: "rgba(255,255,255,0.3)", fontWeight: 400 }}>
-            office.ziziyi.com
+            {displayUrl}
           </span>
         </div>
       </div>

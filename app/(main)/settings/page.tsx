@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { SettingsView } from "@/components/main/settings-view";
 
 export const metadata: Metadata = {
-  title: "Settings — ZIZIYI Office",
+  title: "Settings — Rakko Office",
   description:
-    "Customize your ZIZIYI Office experience: change editor theme, language, and plugin preferences.",
+    "Customize your Rakko Office experience: change editor theme and language.",
   robots: {
     index: false,
     follow: false,

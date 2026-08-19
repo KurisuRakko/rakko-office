@@ -2,7 +2,7 @@
   <img src="./public/logo.svg" width="120" height="120" alt="Office App Logo">
 </p>
 
-<h1 align="center">ZIZIYI Office</h1>
+<h1 align="center">Rakko Office</h1>
 
 <p align="center">
   <strong>一款现代化、本地优先的 Office 文档预览与编辑解决方案。</strong>
@@ -12,41 +12,27 @@
   <img src="https://img.shields.io/badge/%E7%89%88%E6%9C%AC-0.1.0-blue.svg" alt="Version">
   <img src="https://img.shields.io/badge/%E6%A1%86%E6%9E%B6-Next.js%2015-black.svg" alt="Framework">
   <img src="https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF%E8%AF%81-AGPL%20v3-orange.svg" alt="License">
-  <a href="https://o.ziziyi.com/">
-    <img src="https://img.shields.io/badge/%E7%BD%91%E7%AB%99-o.ziziyi.com-blue.svg" alt="Website">
-  </a>
 </p>
 
 <p align="center">
-  <a href="https://o.ziziyi.com/"><strong>🚀 在线演示</strong></a> | <span>中文版</span> | <a href="README.md">English</a>
-</p>
-
-<p align="center">
-  <strong>快速创建:</strong>
-  <a href="https://o.ziziyi.com/editor?new=docx">📄 Word 文档</a> | 
-  <a href="https://o.ziziyi.com/editor?new=xlsx">📊 Excel 表格</a> | 
-  <a href="https://o.ziziyi.com/editor?new=pptx">📽️ PowerPoint 幻灯片</a>
+  <span>中文版</span> | <a href="README.md">English</a>
 </p>
 
 ---
 
 ## 🚀 概览
 
-**ZIZIYI Office** 是一款强大的 Web 应用程序，旨在为您提供在浏览器中直接查看和编辑 Office 文档（Word、Excel、PowerPoint）的无缝体验。它基于“本地优先”的设计理念，在提供桌面级编辑体验的同时，确保您的文档隐私和安全。
+**Rakko Office** 是一款强大的 Web 应用程序，旨在为您提供在浏览器中直接查看和编辑 Office 文档（Word、Excel、PowerPoint）的无缝体验。它基于“本地优先”的设计理念，在提供桌面级编辑体验的同时，确保您的文档隐私和安全。
 
-### 🌍 访问选项
-
-- **亚太地区优化访问 ([o.ziziyi.com](https://o.ziziyi.com/))**：部署于 EdgeOne 平台。域名更简短易记，且在亚太地区（如中国、日本、新加坡等）网络连接速度更快。
-- **全球通用访问 ([office.ziziyi.com](https://office.ziziyi.com/))**：部署于 Cloudflare Pages 平台。建议亚太地区以外的用户使用。
+本项目 fork 自 [baotlake/office-website](https://github.com/baotlake/office-website)，经过品牌重塑并调整为面向 Docker 自托管部署。本项目不提供任何公开在线实例——请参见下方的[部署](#-部署)章节自行运行。
 
 ## ✨ 核心特性
 
 - **📂 多格式支持**: 支持打开和编辑 `.docx`、`.xlsx` 和 `.pptx` 文件。
 - **🔒 本地优先**: 所有文件均在浏览器本地处理，确保数据隐私。
-- **⚡ 快速且响应迅速**: 基于 Next.js 15+ 构建，并针对性能进行了优化。
+- **⚡ 快速且响应迅速**: 基于 Next.js 构建，并针对性能进行了优化。
 - **🛠️ 丰富工具**: 集成了先进的编辑功能。
 - **📦 持久化存储**: 使用 IndexedDB 进行本地文件管理。
-- **🌐 云端集成**: 通过 Uppy 轻松选择文件（支持 Google Drive、Dropbox、OneDrive）。
 
 ## 🛠️ 技术栈
 
@@ -54,7 +40,7 @@
 - **状态管理**: [Zustand](https://github.com/pmndrs/zustand)
 - **UI 组件**: [Radix UI](https://www.radix-ui.com/) & [Lucide Icons](https://lucide.dev/)
 - **数据库**: [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) (通过 `idb`)
-- **部署**: [Cloudflare Pages](https://pages.cloudflare.com/)
+- **部署**: Docker + Caddy（自托管静态导出，见下文）
 
 ## 🛠️ 快速开始
 
@@ -69,7 +55,7 @@
 
    ```bash
    git clone <repository-url>
-   cd website
+   cd rakko-office
    ```
 
 2. 安装依赖:
@@ -103,11 +89,14 @@ pnpm dev
 
 ## 🚢 部署
 
-本项目已预配置 Cloudflare Pages。
+本项目没有托管型云部署——发行方式是自托管 Docker 镜像。构建产物是内置了 OnlyOffice DocumentServer 资产的 Next.js 静态导出，由 Caddy 提供服务。
 
-- **生产环境构建**: `pnpm build`
-- **部署到生产环境**: `pnpm deploy`
-- **预览部署**: `pnpm deploy:preview`
+```bash
+./build.sh                     # 构建 office-website:latest（默认 DS_VERSION=9.3.1，HASH=1）
+docker run -p 80:80 office-website:latest
+```
+
+版本/修订号参数见 `build.sh`，完整构建与服务配置见 `Dockerfile` / `Caddyfile`。构建前请设置 `NEXT_PUBLIC_SITE_URL`（见 `.env.example`）为实际访问域名，否则 canonical 链接、sitemap 与 Open Graph 元数据会指向默认值 `http://localhost:3000` 而非真实地址。
 
 ## 🤝 贡献
 
@@ -115,7 +104,7 @@ pnpm dev
 
 ## 📜 许可证
 
-本项目采用 **GNU Affero General Public License Version 3 (AGPL v3)** 开源协议。
+本项目采用 **GNU Affero General Public License Version 3 (AGPL v3)** 开源协议。第三方归属声明见 [NOTICE.md](./NOTICE.md)。
 
 ## 🙏 鸣谢
 

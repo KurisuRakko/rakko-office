@@ -2,7 +2,7 @@
   <img src="./public/logo.svg" width="120" height="120" alt="Office App Logo">
 </p>
 
-<h1 align="center">ZIZIYI Office</h1>
+<h1 align="center">Rakko Office</h1>
 
 <p align="center">
   <strong>A modern, local-first Office document preview and editing solution.</strong>
@@ -12,41 +12,27 @@
   <img src="https://img.shields.io/badge/version-0.1.0-blue.svg" alt="Version">
   <img src="https://img.shields.io/badge/framework-Next.js%2015-black.svg" alt="Framework">
   <img src="https://img.shields.io/badge/license-AGPL%20v3-orange.svg" alt="License">
-  <a href="https://office.ziziyi.com/">
-    <img src="https://img.shields.io/badge/website-office.ziziyi.com-blue.svg" alt="Website">
-  </a>
 </p>
 
 <p align="center">
-  <a href="https://office.ziziyi.com/"><strong>🚀 Live Demo</strong></a> | <a href="README.zh-CN.md">中文版</a> | <span>English</span>
-</p>
-
-<p align="center">
-  <strong>Quick Create:</strong>
-  <a href="https://office.ziziyi.com/editor?new=docx">📄 Word</a> | 
-  <a href="https://office.ziziyi.com/editor?new=xlsx">📊 Excel</a> | 
-  <a href="https://office.ziziyi.com/editor?new=pptx">📽️ PowerPoint</a>
+  <a href="README.zh-CN.md">中文版</a> | <span>English</span>
 </p>
 
 ---
 
 ## 🚀 Overview
 
-**ZIZIYI Office** is a powerful web application designed to provide a seamless experience for viewing and editing Office documents (Word, Excel, PowerPoint) directly in your browser. Built with a "local-first" philosophy, it ensures your documents remain private and secure while providing a desktop-class editing experience.
+**Rakko Office** is a powerful web application designed to provide a seamless experience for viewing and editing Office documents (Word, Excel, PowerPoint) directly in your browser. Built with a "local-first" philosophy, it ensures your documents remain private and secure while providing a desktop-class editing experience.
 
-### 🌍 Access Options
-
-- **Global ([office.ziziyi.com](https://office.ziziyi.com/))**: Hosted on Cloudflare Pages. Recommended for users outside the Asia-Pacific region.
-- **Asia-Pacific Optimized ([o.ziziyi.com](https://o.ziziyi.com/))**: Hosted on EdgeOne. Features a shorter, easier-to-remember domain and offers faster access for users in the Asia-Pacific region (e.g., China, Japan, Singapore).
+This project is a fork of [baotlake/office-website](https://github.com/baotlake/office-website), rebranded and adapted for self-hosted Docker deployment. It ships no public instance — see [Deployment](#-deployment) to run your own.
 
 ## ✨ Key Features
 
 - **📂 Multi-Format Support**: Open and edit `.docx`, `.xlsx`, and `.pptx` files.
 - **🔒 Local-First**: Files are processed locally in your browser, ensuring data privacy.
-- **⚡ Fast & Responsive**: Built with Next.js 15+ and optimized for performance.
+- **⚡ Fast & Responsive**: Built with Next.js and optimized for performance.
 - **🛠️ Rich Tools**: Integrated with advanced editing capabilities.
 - **📦 Persistent Storage**: Uses IndexedDB for local file management.
-- **🌐 Cloud Integration**: Easy file selection via Uppy (Google Drive, Dropbox, OneDrive).
 
 ## 🛠️ Technology Stack
 
@@ -54,7 +40,7 @@
 - **State Management**: [Zustand](https://github.com/pmndrs/zustand)
 - **UI Components**: [Radix UI](https://www.radix-ui.com/) & [Lucide Icons](https://lucide.dev/)
 - **Database**: [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) (via `idb`)
-- **Deployment**: [Cloudflare Pages](https://pages.cloudflare.com/)
+- **Deployment**: Docker + Caddy (self-hosted static export — see below)
 
 ## 🛠️ Getting Started
 
@@ -69,7 +55,7 @@
 
    ```bash
    git clone <repository-url>
-   cd website
+   cd rakko-office
    ```
 
 2. Install dependencies:
@@ -103,11 +89,14 @@ See `scripts/fetch-assets.sh` for the version/hash arguments, and `Dockerfile` f
 
 ## 🚢 Deployment
 
-The project is configured for Cloudflare Pages.
+This project has no managed cloud deployment — it ships as a self-hosted Docker image. The build produces a Next.js static export with the OnlyOffice DocumentServer assets baked in, served by Caddy.
 
-- **Production Build**: `pnpm build`
-- **Deploy to Production**: `pnpm deploy`
-- **Deploy Preview**: `pnpm deploy:preview`
+```bash
+./build.sh                     # builds office-website:latest (defaults: DS_VERSION=9.3.1, HASH=1)
+docker run -p 80:80 office-website:latest
+```
+
+See `build.sh` for version/hash arguments and `Dockerfile` / `Caddyfile` for the full build and serving setup. Set `NEXT_PUBLIC_SITE_URL` (see `.env.example`) to your actual domain before building, so canonical links, the sitemap, and Open Graph metadata point somewhere real instead of the `http://localhost:3000` default.
 
 ## 🤝 Contributing
 
@@ -115,7 +104,7 @@ Contributions are welcome! Please feel free to submit a Pull Request or open an 
 
 ## 📜 License
 
-This project is licensed under the **GNU Affero General Public License Version 3 (AGPL v3)**.
+This project is licensed under the **GNU Affero General Public License Version 3 (AGPL v3)**. See [NOTICE.md](./NOTICE.md) for third-party attributions.
 
 ## 🙏 Acknowledgments
 

@@ -3,12 +3,13 @@ import { GoogleAnalytics } from '@next/third-parties/google'
 import { getMessages } from "next-intl/server";
 import { I18nProvider } from "@/components/i18n-provider";
 import { ProgressProvider } from "@/components/progress-provider";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://office.ziziyi.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "ZIZIYI Office — Free Online Word, Excel & PowerPoint Editor",
+    default: "Rakko Office — Free Online Word, Excel & PowerPoint Editor",
     template: "%s",
   },
   description:
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
     "edit excel online",
     "serverless office",
     "privacy first",
-    "ZIZIYI",
+    "Rakko Office",
   ],
   icons: {
     icon: [
@@ -37,13 +38,12 @@ export const metadata: Metadata = {
     apple: "/logo.png",
   },
   openGraph: {
-    siteName: "ZIZIYI Office",
+    siteName: "Rakko Office",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    creator: "@nicezizi",
   },
   robots: {
     index: true,
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   other: {
     "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
-    "apple-mobile-web-app-title": "ZIZIYI Office",
+    "apple-mobile-web-app-title": "Rakko Office",
   },
 };
 
@@ -73,8 +73,8 @@ export default async function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "ZIZIYI Office",
-    url: "https://office.ziziyi.com",
+    name: "Rakko Office",
+    url: SITE_URL,
     description:
       "Open, view, and edit Word, Excel, and PowerPoint documents directly in your browser. No upload, no server — your files stay private.",
     applicationCategory: "BusinessApplication",
@@ -89,7 +89,7 @@ export default async function RootLayout({
       "No file upload required",
       "Privacy-first — files stay local",
       "Free templates",
-      "Browser extension for drag & drop",
+      "Drag & drop to open files",
     ],
   };
 

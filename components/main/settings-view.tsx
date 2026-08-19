@@ -35,7 +35,7 @@ const sortedLanguages = [
 
 export function SettingsView() {
   const t = useExtracted();
-  usePageTitle(t("Settings — ZIZIYI Office"));
+  usePageTitle(t("Settings — Rakko Office"));
   const { language, theme, setState } = useAppStore();
 
   const themes: {
