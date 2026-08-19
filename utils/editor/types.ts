@@ -209,9 +209,3 @@ export type OfficeTheme =
   | "theme-dark"
   | "theme-night"
   | "theme-contrast-dark";
-
-export type PluginMode = "featured" | "all" | "none";
-
-export interface ServerOptions {
-  getState?: () => { plugins: PluginMode };
-}

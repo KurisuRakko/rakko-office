@@ -1,6 +1,6 @@
 import { converter } from "./x2t";
 import { MockSocket } from "./socket";
-import { User, Participant, AscSaveTypes, ServerOptions } from "./types";
+import { User, Participant, AscSaveTypes } from "./types";
 import { emptyDocx, emptyPdf, emptyPptx, emptyXlsx } from "./empty";
 import { getDocumentType, getFileExt } from "./utils";
 import { getPluginsData } from "./plugins";
@@ -52,10 +52,7 @@ export class EditorServer {
   private downloadId: string = "";
   private downloadParts: Uint8Array[] = [];
 
-  private options: ServerOptions = {};
-
-  constructor(options: ServerOptions = {}) {
-    this.options = options;
+  constructor() {
     this.send = this.send.bind(this);
     this.handleConnect = this.handleConnect.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
