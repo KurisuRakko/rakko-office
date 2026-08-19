@@ -1,4 +1,4 @@
-import { Locale } from "@ziziyi/utils";
+import { Locale } from "@/lib/locale";
 import { getRequestConfig } from "next-intl/server";
 import { getTimeZone } from "./config";
 

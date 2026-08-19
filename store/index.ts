@@ -7,7 +7,7 @@ import {
   Locale,
   LocaleExtend,
   standardizeLocale,
-} from "@ziziyi/utils";
+} from "@/lib/locale";
 import { type OfficeTheme, type PluginMode } from "@/utils/editor/types";
 
 /**
@@ -51,7 +51,7 @@ export const useAppStore = create<AppState>()(
       // Settings Initial State
       language: LocaleExtend.Auto,
       theme: "theme-white",
-      plugins: "featured",
+      plugins: "none",
 
       // Settings Actions
       setState: (newState) => set((state) => ({ ...state, ...newState })),

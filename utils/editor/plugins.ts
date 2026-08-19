@@ -1,75 +1,9 @@
-export const pluginsBase = "https://office-plugins.ziziyi.com/v9/sdkjs-plugins";
-
-export const allPlugins = [
-  "ai",
-  "apertium",
-  "autocomplete",
-  "bergamot",
-  "chess",
-  "cvbuilder",
-  "datepicker",
-  "deepl",
-  "doc2md",
-  "drawio",
-  "easybib",
-  "glavred",
-  "grammalecte",
-  "highlightcode",
-  "html",
-  "icons",
-  "idphoto",
-  "insertQR",
-  "jitsi",
-  "languagetool",
-  "marketplace",
-  "mathpix",
-  "mendeley",
-  "news",
-  "ocr",
-  "onlydraw",
-  "photoeditor",
-  "pixabay",
-  "pomodoro",
-  "rainbow",
-  "speech",
-  "speechrecognition",
-  "telegram",
-  "termef",
-  "textcleaner",
-  "texthighlighter",
-  "thesaurus",
-  "translator",
-  "typograf",
-  "videoembedder",
-  "wordpress",
-  "wordscounter",
-  "youtube",
-  "zhipu",
-  "zoom",
-  "zotero",
-];
-
-export const featuredPlugins = [
-  "marketplace",
-  "ai",
-  "youtube",
-  "jitsi",
-  "photoeditor",
-  "typograf",
-  "languagetool",
-  "thesaurus",
-  "deepl",
-  "zhipu",
-];
-
-export function getPluginConfigUrl(name: string) {
-  return `${pluginsBase}/${name}/config.json`;
-}
-
-export function getPluginsData(list: string[]) {
+// 第一阶段不接入插件市场（原实现依赖 ziziyi 作者个人维护的 CDN）。
+// 保留此函数仅为让调用方（server.ts 的 /plugins.json 处理）拿到统一的空结构。
+export function getPluginsData() {
   return {
     url: "",
-    pluginsData: list.map(getPluginConfigUrl),
+    pluginsData: [],
     autostart: [],
   };
 }

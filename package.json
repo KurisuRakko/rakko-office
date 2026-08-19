@@ -1,5 +1,5 @@
 {
-  "name": "office-website",
+  "name": "rakko-office",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,10 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "svgr": "npx @svgr/cli --out-dir components/svg --typescript -- public/svg",
-    "pages:dev": "npx wrangler pages dev ./out",
-    "deploy": "pnpm build && npx wrangler pages deploy ./out --project-name=office-website",
-    "deploy:preview": "pnpm build && npx wrangler pages deploy ./out --project-name=office-website --branch=preview"
+    "typecheck": "tsc --noEmit",
+    "svgr": "npx @svgr/cli --out-dir components/svg --typescript -- public/svg"
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
@@ -18,14 +16,6 @@
     "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-tooltip": "^1.2.8",
-    "@uppy/core": "^5.2.0",
-    "@uppy/dashboard": "^5.1.0",
-    "@uppy/drag-drop": "^5.1.0",
-    "@uppy/dropbox": "^5.1.0",
-    "@uppy/google-drive": "^5.1.0",
-    "@uppy/onedrive": "^5.1.0",
-    "@uppy/react": "^5.1.1",
-    "@ziziyi/utils": "^1.0.2",
     "clsx": "^2.1.1",
     "eventemitter3": "^5.0.1",
     "idb": "^8.0.3",

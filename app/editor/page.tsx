@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useEffect, useState } from "react";
+import { useLayoutEffect, useRef, useEffect } from "react";
 import { useAppStore, useResolvedLanguage, useHasHydrated } from "@/store";
 import {
   API_JS,
@@ -12,8 +12,6 @@ import io, { MockSocket } from "@/utils/editor/socket";
 import { createFetchProxy } from "@/utils/editor/fetch";
 import { createXHRProxy } from "@/utils/editor/xhr";
 import { DocEditor } from "@/utils/editor/types";
-import { createExtensionLoader } from "@/utils/extension";
-import InstallExtensionDialog from "@/components/install-extension-dialog";
 
 export default function Page() {
   const server = useAppStore((state) => state.server);
@@ -21,8 +19,6 @@ export default function Page() {
   const theme = useAppStore((state) => state.theme);
   const hasHydrated = useHasHydrated();
   const isDirty = useRef(false);
-  const [showInstallHint, setShowInstallHint] = useState(false);
-  const tryDirectRef = useRef<(() => Promise<void>) | null>(null);
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -43,9 +39,7 @@ export default function Page() {
     const apiUrl = APP_ROOT + API_JS;
     const searchParams = new URLSearchParams(window.location.search);
 
-    const fileId = searchParams.get("fileId");
     const newDoc = searchParams.get("new");
-    const fileUrl = searchParams.get("url");
     const paramEditing = searchParams.get("editing");
     const paramLang = searchParams.get("lang");
     const paramTheme = searchParams.get("theme");
@@ -225,18 +219,6 @@ export default function Page() {
       if (newDoc) {
         server.openNew(newDoc)
       }
-      if (fileUrl && !fileId) {
-        const { loader, tryDirect } = createExtensionLoader({
-          onWaiting: () => setShowInstallHint(true),
-          onReady: () => setShowInstallHint(false),
-        });
-        tryDirectRef.current = tryDirect;
-        server.openUrl(fileUrl, {
-          fileType: searchParams.get("fileType") || '',
-          fileName: searchParams.get("fileName") || '',
-          loader,
-        })
-      }
       loadEditor()
     }
 
@@ -251,12 +233,6 @@ export default function Page() {
   }, [hasHydrated]);
 
   return (
-    <>
-    <InstallExtensionDialog
-      open={showInstallHint}
-      onClose={() => setShowInstallHint(false)}
-      onTryDirect={tryDirectRef.current || undefined}
-    />
     <div>
       <div className="w-screen h-screen">
         <div id="placeholder">
@@ -267,6 +243,5 @@ export default function Page() {
         </div>
       </div>
     </div>
-    </>
   );
 }

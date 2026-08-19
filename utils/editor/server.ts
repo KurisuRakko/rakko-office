@@ -3,7 +3,7 @@ import { MockSocket } from "./socket";
 import { User, Participant, AscSaveTypes, ServerOptions } from "./types";
 import { emptyDocx, emptyPdf, emptyPptx, emptyXlsx } from "./empty";
 import { getDocumentType, getFileExt } from "./utils";
-import { allPlugins, featuredPlugins, getPluginsData } from "./plugins";
+import { getPluginsData } from "./plugins";
 
 function mergeBuffers(buffers: Uint8Array[]) {
   const totalLength = buffers.reduce((acc, buffer) => acc + buffer.length, 0);
@@ -489,14 +489,8 @@ export class EditorServer {
     }
 
     if (u.pathname == "/plugins.json") {
-      const state = this.options.getState?.();
-      if (state?.plugins == "none") {
-        return Response.json({ url: "", pluginsData: [], autostart: [] });
-      }
-      if (state?.plugins == "all") {
-        return Response.json(getPluginsData(allPlugins));
-      }
-      return Response.json(getPluginsData(featuredPlugins));
+      // 第一阶段不接入插件市场，恒定返回空结构。
+      return Response.json(getPluginsData());
     }
 
     return null;

@@ -21,6 +21,10 @@
 # production
 /build
 
+# OnlyOffice sdkjs 引擎/字体等运行时资产，由 scripts/fetch-assets.sh
+# 或 Docker 构建期从官方镜像拉取到 /public/v<版本>-<修订号>/，不入库
+/public/v*-*/
+
 # misc
 .DS_Store
 *.pem
