@@ -86,6 +86,21 @@
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+## 🧩 Local Development (OnlyOffice Assets)
+
+OnlyOffice runtime assets (the `sdkjs` engine, `web-apps` frontend, and fonts) are **not checked into this repository** — they are pulled from the official `onlyoffice/documentserver` Docker image at build/dev time (see the `/public/v*-*/` rule in `.gitignore` and `.dockerignore`). Running `pnpm dev` on a fresh clone without these assets will not produce a working editor.
+
+Bootstrap them locally (requires Docker):
+
+```bash
+pnpm install
+bash scripts/fetch-assets.sh   # pulls assets into public/v9.3.1-1/ (defaults: DS_VERSION=9.3.1, HASH=1)
+cp .env.example .env.local     # NEXT_PUBLIC_APP_ROOT must match the version/hash above
+pnpm dev
+```
+
+See `scripts/fetch-assets.sh` for the version/hash arguments, and `Dockerfile` for the equivalent production build flow.
+
 ## 🚢 Deployment
 
 The project is configured for Cloudflare Pages.

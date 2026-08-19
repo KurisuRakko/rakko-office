@@ -37,6 +37,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# .env.example 是给贡献者看的模板，需要入库，故从上面的忽略规则中排除
+!.env.example
 
 # vercel
 .vercel

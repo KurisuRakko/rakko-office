@@ -86,6 +86,21 @@
 
 4. 在浏览器中访问 [http://localhost:3000](http://localhost:3000)。
 
+## 🧩 本地开发（OnlyOffice 运行时资产）
+
+OnlyOffice 运行时资产（`sdkjs` 引擎、`web-apps` 前端与字体）**不进入本仓库**——它们在构建/开发时从官方 `onlyoffice/documentserver` 镜像中拉取（参见 `.gitignore` 中的 `/public/v*-*/` 规则与 `.dockerignore`）。全新克隆后若缺少这些资产直接运行 `pnpm dev`，得不到可用的编辑器。
+
+本地拉取步骤（需要 Docker）：
+
+```bash
+pnpm install
+bash scripts/fetch-assets.sh   # 拉取资产到 public/v9.3.1-1/（默认 DS_VERSION=9.3.1，HASH=1）
+cp .env.example .env.local     # NEXT_PUBLIC_APP_ROOT 需与上面的版本/修订号保持一致
+pnpm dev
+```
+
+版本/修订号参数说明见 `scripts/fetch-assets.sh`，生产构建的等价流程见 `Dockerfile`。
+
 ## 🚢 部署
 
 本项目已预配置 Cloudflare Pages。
