@@ -58,18 +58,19 @@ ENV NEXT_PUBLIC_GA_ID=${GA_ID}
 
 WORKDIR /app
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Install pnpm via corepack. The version is pinned by the "packageManager"
+# field in package.json (resolved when pnpm is first invoked below) — do not
+# use `corepack prepare pnpm@latest` here, that would drift from the lockfile
+# version. COREPACK_ENABLE_DOWNLOAD_PROMPT avoids an interactive confirmation
+# when corepack downloads the pinned pnpm version.
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack enable
 
 # Copy dependency manifests first for better layer caching.
 COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies (frozen lockfile for reproducibility).
-# Allow dependency build scripts: pnpm 11 fails with ERR_PNPM_IGNORED_BUILDS
-# in non-interactive shells when build scripts are ignored. The packages
-# involved are standard native ones (@swc/core, sharp, @parcel/watcher,
-# unrs-resolver) whose postinstall is safe to run.
-RUN pnpm install --frozen-lockfile --config.dangerously-allow-all-builds=true
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the source code.
 COPY . .
