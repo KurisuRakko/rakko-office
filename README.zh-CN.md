@@ -92,11 +92,15 @@ pnpm dev
 本项目没有托管型云部署——发行方式是自托管 Docker 镜像。构建产物是内置了 OnlyOffice DocumentServer 资产的 Next.js 静态导出，由 Caddy 提供服务。
 
 ```bash
-./build.sh                     # 构建 office-website:latest（默认 DS_VERSION=9.3.1，HASH=1）
-docker run -p 80:80 office-website:latest
+./build.sh                                                  # 构建 rakko-office:latest（默认 DS_VERSION=9.3.1，HASH=1，SITE_URL=http://localhost:3000，GA_ID 未设置）
+./build.sh 9.3.1 1 https://office.example.com               # 内置你的真实域名
+./build.sh 9.3.1 1 https://office.example.com G-XXXXXXXXXX  # 按需启用 Google Analytics
+docker run -p 80:80 rakko-office:latest
 ```
 
-版本/修订号参数见 `build.sh`，完整构建与服务配置见 `Dockerfile` / `Caddyfile`。构建前请设置 `NEXT_PUBLIC_SITE_URL`（见 `.env.example`）为实际访问域名，否则 canonical 链接、sitemap 与 Open Graph 元数据会指向默认值 `http://localhost:3000` 而非真实地址。
+`build.sh` 接受四个可选位置参数——`DS_VERSION`、`HASH`、`SITE_URL`、`GA_ID`——之后可附加任意额外的 `docker build` 参数；完整参数说明见脚本头部注释，完整构建与服务配置见 `Dockerfile` / `Caddyfile`。请把第三个参数设为你的真实访问域名，否则 canonical 链接、sitemap 与 Open Graph 元数据会指向默认值 `http://localhost:3000` 而非真实地址（对应构建变量 `NEXT_PUBLIC_SITE_URL`，见 `.env.example`）。
+
+Google Analytics 默认关闭且完全可选：除非把 GA4 属性 ID 作为第四个参数传入（或构建前设置 `NEXT_PUBLIC_GA_ID`，见 `.env.example`），否则构建出的站点不会加载任何分析脚本，也不会向 Google 发出任何请求，符合本项目「数据不出浏览器」的隐私主张。
 
 ## 🤝 贡献
 

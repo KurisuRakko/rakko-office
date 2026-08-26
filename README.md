@@ -92,11 +92,15 @@ See `scripts/fetch-assets.sh` for the version/hash arguments, and `Dockerfile` f
 This project has no managed cloud deployment — it ships as a self-hosted Docker image. The build produces a Next.js static export with the OnlyOffice DocumentServer assets baked in, served by Caddy.
 
 ```bash
-./build.sh                     # builds office-website:latest (defaults: DS_VERSION=9.3.1, HASH=1)
-docker run -p 80:80 office-website:latest
+./build.sh                                                  # builds rakko-office:latest (defaults: DS_VERSION=9.3.1, HASH=1, SITE_URL=http://localhost:3000, GA_ID unset)
+./build.sh 9.3.1 1 https://office.example.com               # bake in your real domain
+./build.sh 9.3.1 1 https://office.example.com G-XXXXXXXXXX  # optionally enable Google Analytics
+docker run -p 80:80 rakko-office:latest
 ```
 
-See `build.sh` for version/hash arguments and `Dockerfile` / `Caddyfile` for the full build and serving setup. Set `NEXT_PUBLIC_SITE_URL` (see `.env.example`) to your actual domain before building, so canonical links, the sitemap, and Open Graph metadata point somewhere real instead of the `http://localhost:3000` default.
+`build.sh` takes four optional positional arguments — `DS_VERSION`, `HASH`, `SITE_URL`, and `GA_ID` — followed by any extra `docker build` flags; see the script header for the full list and `Dockerfile` / `Caddyfile` for the build and serving setup. Pass your actual domain as the third argument so canonical links, the sitemap, and Open Graph metadata point somewhere real instead of the `http://localhost:3000` default (this maps to the `NEXT_PUBLIC_SITE_URL` build variable — see `.env.example`).
+
+Google Analytics is optional and off by default: unless you pass a GA4 property ID as the fourth argument (or set `NEXT_PUBLIC_GA_ID` before building — see `.env.example`), the built site loads no analytics script and sends no request to Google, consistent with this project's "data never leaves your browser" privacy stance.
 
 ## 🤝 Contributing
 

@@ -13,6 +13,20 @@ ARG DS_VERSION=9.3.1
 # the DocumentServer version itself.
 ARG HASH=1
 
+# Public site URL, baked into the Next.js build (canonical links, sitemap.xml,
+# robots.txt, Open Graph metadata — see lib/site.ts). NEXT_PUBLIC_* values are
+# inlined at build time, so this must be set via --build-arg before `pnpm
+# build` runs; it cannot be changed afterwards by an environment variable at
+# container runtime. Defaults to the same localhost fallback as lib/site.ts.
+ARG SITE_URL=http://localhost:3000
+
+# Google Analytics property ID (e.g. G-XXXXXXXXXX) — OPTIONAL and off by
+# default. Empty means the built site renders no analytics script and sends no
+# request to Google, consistent with this project's privacy-first stance; set
+# it only if you explicitly want visitor stats for your self-hosted instance.
+# Like SITE_URL it is inlined at build time (as NEXT_PUBLIC_GA_ID).
+ARG GA_ID=
+
 # ============================================================
 # Stage 1: OnlyOffice DocumentServer assets source
 # ============================================================
@@ -32,9 +46,15 @@ FROM node:22-alpine AS builder
 # Re-declare args inside this stage to make them visible here.
 ARG DS_VERSION
 ARG HASH
+ARG SITE_URL
+ARG GA_ID
 
 # Expose the versioned asset path to Next.js at build time.
 ENV NEXT_PUBLIC_APP_ROOT=/v${DS_VERSION}-${HASH}
+
+# Expose the public site URL and (optional) GA ID to Next.js at build time.
+ENV NEXT_PUBLIC_SITE_URL=${SITE_URL}
+ENV NEXT_PUBLIC_GA_ID=${GA_ID}
 
 WORKDIR /app
 
@@ -45,7 +65,11 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies (frozen lockfile for reproducibility).
-RUN pnpm install --frozen-lockfile
+# Allow dependency build scripts: pnpm 11 fails with ERR_PNPM_IGNORED_BUILDS
+# in non-interactive shells when build scripts are ignored. The packages
+# involved are standard native ones (@swc/core, sharp, @parcel/watcher,
+# unrs-resolver) whose postinstall is safe to run.
+RUN pnpm install --frozen-lockfile --config.dangerously-allow-all-builds=true
 
 # Copy the rest of the source code.
 COPY . .

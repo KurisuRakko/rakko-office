@@ -6,6 +6,11 @@ import { ProgressProvider } from "@/components/progress-provider";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
+// Google Analytics 完全可选：自托管者需显式设置 NEXT_PUBLIC_GA_ID 才会加载该脚本。
+// 默认（未设置）时不渲染任何分析脚本、不发出任何第三方请求，
+// 这是本项目「数据不出浏览器」隐私主张的必要前提——不能像上游那样硬编码作者自己的 GA 属性。
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -107,7 +112,7 @@ export default async function RootLayout({
           <I18nProvider initialMessages={messages}>{children}</I18nProvider>
         </ProgressProvider>
       </body>
-      <GoogleAnalytics gaId="G-EFLBPT6TS8" />
+      {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
     </html>
   );
 }
