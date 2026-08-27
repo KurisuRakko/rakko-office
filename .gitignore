@@ -3,6 +3,8 @@
 # dependencies
 /node_modules
 /.pnp
+# pnpm 本地 store（沙箱内安装依赖时使用 --store-dir 指向仓库内，不入库）
+/.pnpm-store
 .pnp.*
 .yarn/*
 !.yarn/patches

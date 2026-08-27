@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 启用 corepack 并让 pnpm 版本按 package.json 的 packageManager 字段解析，
+      # 不在此处指定具体版本，与 Dockerfile 的做法保持一致。
+      - name: 启用 corepack
+        run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+
+      # lint 暂不作为门禁：本项目继承自上游的 lint 债务尚有 119 个问题
+      # （36 errors），纳入门禁会让 CI 从第一天起就是红的。用 continue-on-error
+      # 保留可见性但不阻塞；债务清零后应移除 continue-on-error 使其恢复阻塞。
+      - name: lint（不阻塞）
+        run: pnpm lint
+        continue-on-error: true
+
+      - run: pnpm build
